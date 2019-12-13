@@ -8,7 +8,7 @@ class TodosContainer extends Component {
   state= {
     todos: []
   }
-  
+   
   componentDidMount() {
     this.fetchData();
   };
@@ -39,6 +39,17 @@ class TodosContainer extends Component {
         this.setState({ todos: todos });
     });
   }
+  
+  //deletetodofunction will be passed down as props to Todo but this state will be updated
+  //when it is called because 'this' will refer to this container
+  deleteTodo = (todo) => {
+    TodoModel.delete(todo).then(data => {
+      let todos = this.state.todos.filter(todo => {
+        return todo._id !== data._id;
+      })
+      this.setState({ todos })
+    })
+  }
 
   render() {
     return (
@@ -46,10 +57,14 @@ class TodosContainer extends Component {
       <CreateTodoForm
         createTodo={this.createTodo} />
         <Todos
-          todos={this.state.todos} />
+          todos={this.state.todos}
+          //add in delete function as props
+          deleteTodo={this.deleteTodo}
+        />
       </div>
     );
   };
 };
 
 export default TodosContainer;
+

@@ -22,7 +22,13 @@ class TodoModel {
       .catch(err => console.log('Could not post todo \n', err));
   }
 
-
+  static delete = (todo) => {
+    return fetch(`${endPoint}/${todo._id}`, { 
+      method: "DELETE" 
+    })
+      .then(response => response.json())
+      .catch(err => console.log('Could not delete todo \n', err));
+  };
 };
 
 export default TodoModel
