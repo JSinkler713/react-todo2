@@ -44,12 +44,36 @@ class TodosContainer extends Component {
   //when it is called because 'this' will refer to this container
   deleteTodo = (todo) => {
     TodoModel.delete(todo).then(data => {
+      //take all the todos which includes the one just deleted, then filter
+      //by returning an array which does not include the todo just deleted
+      //the todo just deleted has id data._id because the backend delete
+      //must return the id....or returns the whole todo and then the id is accessed
       let todos = this.state.todos.filter(todo => {
         return todo._id !== data._id;
       })
+      //resets the state in TodosContainer
       this.setState({ todos })
     })
   }
+
+  //function to update a selected todo
+  
+  updateTodo = todo => {
+  //get the right todo to update
+    const isUpdatedTodo = t => {
+      return t._id === todo._id;
+    }
+  //replace the body of the previous todo with the body of the new todo
+    TodoModel.update(todo)
+      .then(data => {
+        let todos = this.state.todos;
+        //the 'find' loops throught the array of todos to search for 't'
+        //which has the id the same as the todo passed in
+        todos.find(isUpdatedTodo).body = todo.body;
+        this.setState({ todos });
+      })
+  }
+
 
   render() {
     return (
@@ -60,6 +84,8 @@ class TodosContainer extends Component {
           todos={this.state.todos}
           //add in delete function as props
           deleteTodo={this.deleteTodo}
+          // pass down update function as props
+          updateTodo={this.updateTodo}
         />
       </div>
     );

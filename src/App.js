@@ -6,7 +6,7 @@ import routes from './config/routes';
 function App() {
   return (
     <div className="container">
-      <Header/>
+      <Header /> 
       { routes }
     </div>
   );
